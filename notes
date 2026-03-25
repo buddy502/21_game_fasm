@@ -1,0 +1,9 @@
+xxm values need to be aligned by 16 bytes for you to use a 4 value struct
+Every single precision float is 4 bytes.
+
+const char* in fasm do not need [] because they are values passed directly
+[] would dereference the address,
+the function DrawText(const char* title) expects an address so no []
+
+order of linux abi V:
+rdi, rsi, rdx, rcx, r8, r9, r10, r11
