@@ -3,9 +3,6 @@ format ELF64
 section '.text' executable
 public _start
 
-; Include headers
-include 'create_cards.inc'
-
 ; External Variables
 extrn printf
 
@@ -16,7 +13,6 @@ extrn BeginDrawing
 extrn EndDrawing
 extrn ClearBackground
 extrn DrawRectangleRounded
-extrn DrawText
 extrn DrawTextPro
 extrn GetFontDefault
 extrn UnloadFont
@@ -59,10 +55,11 @@ _start:
    ; Program Drawing -------------------------------------------------------
    call BeginDrawing
 
-   mov rdi, 0xFF000000
+   mov edi, 0xFF000000
    call ClearBackground
 
    ; Draw Card
+   sub rsp, 16
    ; Card rectangle
    movq xmm0, [card_rectangle]       ; load first 2 floats: x, y
    movq xmm1, [card_rectangle + 8]   ; load next 2 floats: w, h
@@ -74,49 +71,19 @@ _start:
    mov esi, 0xFF0000FF
    ; Call the function
    call DrawRectangleRounded
+   add rsp, 16
    ; --------------------------------
 
-   sub rsp, 64               ; 64 = 56 + 8 padding to maintain 16-byte alignment
-
-   mov rax, [font]
-   mov [rsp], rax
-   mov rax, [font+8]
-   mov [rsp+8], rax
-   mov rax, [font+16]
-   mov [rsp+16], rax
-   mov rax, [font+24]
-   mov [rsp+24], rax
-   mov rax, [font+32]
-   mov [rsp+32], rax
-   mov rax, [font+40]
-   mov [rsp+40], rax
-   mov rax, [font+48]
-   mov [rsp+48], rax
-   ; [rsp+56..63] = padding, unused
-
-   lea rdi, [text.message]
-   movsd xmm0, [text.xy]
-   xorps xmm1, xmm1
-   xorps xmm2, xmm2
-   movss xmm3, [text.fontSize]
-   movss xmm4, [text.spacing]
-   mov esi, 0xFFFFFFFF
-
-   call DrawTextPro
-   add rsp, 64
-
-   ;lea rdi, [Error_call]
-   ;xor eax, eax
-   ;call printf
+   lea rdi, [card_rectangle]
+   lea rsi, [text.message]
+   lea rdx, [font]
+   call draw_num_on_card
 
    ; Program End Drawing ---------------------------------------------------
    call EndDrawing
    jmp .program_loop
 
 .program_exited:
-   ; Unload the font
-   add rsp, 48
-
    call CloseWindow
    SYSCALL_EXIT 60, 0
 
@@ -124,11 +91,7 @@ section '.data' writeable
 
 Error_call: db "Unexpected Error, segfault", 10, 0
 
-text:          
-   .message:   db "Hello, World!", 0
-   .xy:        dd 100.0, 100.0
-   .fontSize:  dd 30.0
-   .spacing:   dd 0.0
+text: .message:   db "1", 0
 
 font: rb 56
 
@@ -143,3 +106,6 @@ card_roundedness:
 
 card_num_pos_relative:
    xy: dd 5, 5 ; (x, y)
+
+; include headers
+include 'create_cards.inc'
