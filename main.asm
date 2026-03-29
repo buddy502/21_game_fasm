@@ -59,7 +59,6 @@ _start:
    call ClearBackground
 
    ; Draw Card
-   sub rsp, 16
    ; Card rectangle
    movq xmm0, [card_rectangle]       ; load first 2 floats: x, y
    movq xmm1, [card_rectangle + 8]   ; load next 2 floats: w, h
@@ -71,12 +70,8 @@ _start:
    mov esi, 0xFF0000FF
    ; Call the function
    call DrawRectangleRounded
-   add rsp, 16
    ; --------------------------------
 
-   lea rdi, [card_rectangle]
-   lea rsi, [text.message]
-   lea rdx, [font]
    call draw_num_on_card
 
    ; Program End Drawing ---------------------------------------------------
@@ -90,10 +85,6 @@ _start:
 section '.data' writeable
 
 Error_call: db "Unexpected Error, segfault", 10, 0
-
-text: .message:   db "1", 0
-
-font: rb 56
 
 window_title: db "21 game", 0
 
