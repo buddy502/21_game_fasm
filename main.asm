@@ -67,12 +67,13 @@ _start:
    ; Card segments
    mov edi, 10
    ; Card color
-   mov esi, 0xFF0000FF
+   mov esi, 0xFFFFFFFF
    ; Call the function
    call DrawRectangleRounded
    ; --------------------------------
 
-   call draw_num_on_card
+   call drawNumOnCard
+   call updateGame
 
    ; Program End Drawing ---------------------------------------------------
    call EndDrawing
@@ -89,8 +90,14 @@ Error_call: db "Unexpected Error, segfault", 10, 0
 window_title: db "21 game", 0
 
 card_rectangle:
-    .xy: dd 200.0, 200.0 ; (x, y)
-    .wh: dd 100.0, 150.0 ;  (w, h)
+   .xy: dd 200.0, 200.0 ; (x, y)
+   .wh: dd 100.0, 150.0 ;  (w, h)
+card_rectangle_offset:
+   .num1xy: dd 6.0, 6.0
+   .num2xy: dd 15.0, 20.0
+
+card_reference_size: 
+   dd 300.0
 
 card_roundedness:
    dd 0.4
@@ -100,3 +107,4 @@ card_num_pos_relative:
 
 ; include headers
 include 'create_cards.inc'
+include 'events.inc'
