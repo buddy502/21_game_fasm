@@ -5,48 +5,55 @@ extrn IsKeyPressed
 extrn atoi
 extrn sprintf
 
-section '.bss' writeable
-
-card_number: rd 1
-
 section '.data' writeable
 
+card_number: dd 4
+
 fmt_int: db '%d', 0
+fmt_msg: db '%s', 0
+msg db "hello", 10, 0
 
 section '.text' executable
 
 updateGame:
-   mov edi, KEY_LEFT
-   call IsKeyPressed
-   test rax, rax
-   jz .check_right_key
 
-.decrease_num:
-   mov eax, [card_number]
-   cmp eax, 1
-   jle .end_update_game
-   dec eax
-   mov [card_number], eax
-   jmp .update_card_number
+.check_left_key:
+    mov edi, KEY_LEFT
+    call IsKeyPressed
+    test rax, rax
+    jz .check_right_key ; check right if left key isn't pressed
+
+    mov eax, [card_number]
+    cmp eax, 1
+    jle .check_right_key
+    dec eax
+    mov [card_number], eax
+    
+    jmp .update_card_number
 
 .check_right_key:    
-   mov edi, KEY_RIGHT
-   call IsKeyPressed
-   test rax, rax
-   jz .end_update_game
+    mov edi, KEY_RIGHT
+    call IsKeyPressed
+    test rax, rax
+    jz .end_update_game    ; end if right key isn't pressed
 
-.increase_num:
-   mov eax, [card_number]
-   cmp eax, 10
-   jge .end_update_game
-   inc eax
-   mov [card_number], eax
+    mov eax, [card_number]
+    cmp eax, 10
+    jge .end_update_game
+    inc eax
+    mov [card_number], eax
+
+    jmp .update_card_number
 
 .update_card_number:
-   lea rdi, [text.message]
-   lea rsi, [fmt_int]
-   mov edx, [card_number]
-   call sprintf 
+    sub rsp, 8
+    lea rdi, [text.message]
+    lea rsi, [fmt_int]
+    mov edx, [card_number]
+    xor eax, eax
+    call sprintf 
+    add rsp, 8
+    jmp .end_update_game
 
 .end_update_game:
    ret

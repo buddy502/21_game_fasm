@@ -7,3 +7,19 @@ the function DrawText(const char* title) expects an address so no []
 
 order of linux abi V:
 rdi, rsi, rdx, rcx, r8, r9, r10, r11
+
+Variadic function:
+   A function that takes a variable number of arguements like printf and sprintf.
+   Each one requires 16 byte alignment, for example:
+updateGame:
+.update_card_number:
+   sub rsp, 8
+   lea rdi, [text.message]
+   lea rsi, [fmt_int]
+   mov edx, [card_number]
+   xor eax, eax
+   call sprintf 
+   add rsp, 8
+   
+   Every function call in fasm requires 8 bytes so this variadic function needs
+   rsp to be 16-byte aligned before usage

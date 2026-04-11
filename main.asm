@@ -25,7 +25,7 @@ macro SYSCALL_EXIT number, arg0 {
    syscall
 }
 
-macro print str, len {
+macro printnf str, len {
     mov rax, 1      ; sys_write
     mov rdi, 1      ; stdout
     mov rsi, str    ; pointer to string

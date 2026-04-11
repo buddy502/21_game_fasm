@@ -1,19 +1,18 @@
-; draw_num_on_card(float* rect, char* message, Font* font_ptr)
-; rdi = rect pointer
-; rsi = message pointer
-; rdx = font pointer
-
 ; -------- SECTION -----------
 section '.data' writeable
 
 font: rb 56
 text:
    .fontSize: dd 23.0
-   .message:   db "1", 0, 14 dup(0)
+   .message db "4", 15 dup(0)
    .spacing:   db 0 
 
 section '.text' executable
 
+; draw_num_on_card(float* rect, char* message, Font* font_ptr)
+; rdi = rect pointer
+; rsi = message pointer
+; rdx = font pointer
 drawNumOnCard:
    ; -------- NUM 1 -----------
    push rbp
