@@ -14,9 +14,14 @@ extrn EndDrawing
 extrn ClearBackground
 extrn DrawRectangleRounded
 extrn DrawTextPro
-extrn GetFontDefault
+extrn LoadFont
 extrn UnloadFont
 ; ------------------------
+
+; Format printf
+fmt_int: db '%2d', 10, 0
+fmt_str: db '%s', 10, 0
+fmt_ptr: db '%p', 10, 0
 
 ; Macros
 macro SYSCALL_EXIT number, arg0 {
@@ -43,8 +48,9 @@ _start:
    call InitWindow 
 
    ; Create a valid font struct
-   lea rdi, [font]
-   call GetFontDefault
+   lea rdi, [font_data]
+   mov rsi, font
+   call LoadFont
 
    ; Program loop
 .program_loop:
@@ -55,7 +61,7 @@ _start:
    ; Program Drawing -------------------------------------------------------
    call BeginDrawing
 
-   mov edi, 0xFF000000
+   mov edi, 0xFFD3D3D3
    call ClearBackground
 
    ; Draw Card
@@ -67,7 +73,7 @@ _start:
    ; Card segments
    mov edi, 10
    ; Card color
-   mov esi, 0xFFFFFFFF
+   mov esi, 0xFF000000
    ; Call the function
    call DrawRectangleRounded
    ; --------------------------------
@@ -94,7 +100,7 @@ card_rectangle:
    .wh: dd 100.0, 150.0 ;  (w, h)
 card_rectangle_offset:
    .num1xy: dd 6.0, 6.0
-   .num2xy: dd 15.0, 20.0
+   .num2xy: dd 23.0, 25.0
 
 card_reference_size: 
    dd 300.0
@@ -106,5 +112,5 @@ card_num_pos_relative:
    xy: dd 5, 5 ; (x, y)
 
 ; include headers
-include 'create_cards.inc'
 include 'events.inc'
+include 'create_cards.inc'

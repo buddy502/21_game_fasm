@@ -1,42 +1,40 @@
 ; -------- SECTION -----------
 section '.data' writeable
 
-font: rb 56
+font_data: rb 48
+font: db "cardsrc/Libre_Baskerville/LibreBaskerville-SemiBold.ttf", 0
 text:
    .fontSize: dd 23.0
-   .message db "4", 15 dup(0)
-   .spacing:   db 0 
+   .message:  db " 4", 15 dup(0)
+   .spacing:  db 0 
 
 section '.text' executable
 
-; draw_num_on_card(float* rect, char* message, Font* font_ptr)
-; rdi = rect pointer
-; rsi = message pointer
-; rdx = font pointer
+; draw_num_on_card()
+; values stored in this file
 drawNumOnCard:
    ; -------- NUM 1 -----------
    push rbp
    mov rbp, rsp
    sub rsp, 64
-   
-   mov rax, [font]
+
+   mov rax, [font_data]
    mov [rsp], rax
-   mov rax, [font+8]
+   mov rax, [font_data+8]
    mov [rsp+8], rax
-   mov rax, [font+16]
+   mov rax, [font_data+16]
    mov [rsp+16], rax
-   mov rax, [font+24]
+   mov rax, [font_data+24]
    mov [rsp+24], rax
-   mov rax, [font+32]
+   mov rax, [font_data+32]
    mov [rsp+32], rax
-   mov rax, [font+40]
+   mov rax, [font_data+40]
    mov [rsp+40], rax
-   mov rax, [font+48]
-   mov [rsp+48], rax
    
    lea rdi, [text.message]
    ; position
    movups xmm0, [card_rectangle.xy]
+   ; offset position to fit card
    movups xmm6, [card_rectangle_offset.num1xy]
    addps  xmm5, xmm6
    addps xmm0, xmm5
@@ -54,32 +52,34 @@ drawNumOnCard:
 
    pxor xmm4, xmm4
    movss xmm4, [text.spacing]
-   mov esi, 0xFF000000
+   mov esi, 0xFFFFFFFF
+
    call DrawTextPro
+
+   add rsp, 64
 
    ; -------- NUM 2 -----------
 
    sub rsp, 64
    
-   mov rax, [font]
+   mov rax, [font_data]
    mov [rsp], rax
-   mov rax, [font+8]
+   mov rax, [font_data+8]
    mov [rsp+8], rax
-   mov rax, [font+16]
+   mov rax, [font_data+16]
    mov [rsp+16], rax
-   mov rax, [font+24]
+   mov rax, [font_data+24]
    mov [rsp+24], rax
-   mov rax, [font+32]
+   mov rax, [font_data+32]
    mov [rsp+32], rax
-   mov rax, [font+40]
+   mov rax, [font_data+40]
    mov [rsp+40], rax
-   mov rax, [font+48]
-   mov [rsp+48], rax
    
    lea rdi, [text.message]
    ; position
    movups xmm0, [card_rectangle.xy]
    movups xmm5, [card_rectangle.wh]
+   ; offset position to fit card
    movups xmm6, [card_rectangle_offset.num2xy]
    subps  xmm5, xmm6
    addps xmm0, xmm5
@@ -97,8 +97,10 @@ drawNumOnCard:
 
    pxor xmm4, xmm4
    movss xmm4, [text.spacing]
-   mov esi, 0xFF000000
+   mov esi, 0xFFFFFFFF
    call DrawTextPro
+
+   add rsp, 64
    
    mov rsp, rbp
    pop rbp

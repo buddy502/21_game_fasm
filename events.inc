@@ -9,8 +9,6 @@ section '.data' writeable
 
 card_number: dd 4
 
-fmt_int: db '%d', 0
-fmt_msg: db '%s', 0
 msg db "hello", 10, 0
 
 section '.text' executable
