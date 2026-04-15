@@ -3,7 +3,7 @@ Every single precision float is 4 bytes.
 
 const char* in fasm do not need [] because they are values passed directly
 [] would dereference the address,
-the function DrawText(const char* title) expects an address so no [].
+the function DrawText(const char* title) expects an address so no []
 
 order of linux abi V:
 rdi, rsi, rdx, rcx, r8, r9, r10, r11
@@ -22,14 +22,4 @@ updateGame:
    add rsp, 8
    
    Every function call in fasm requires 8 bytes so this variadic function needs
-   rsp to be 16-byte aligned before usage.
-
-   For float value in a variadic function, there should be that number of eax's
-   eg. 2 float values, mov eax, 2; no float values, xor eax, eax; 1 float value, mov eax, 1;
-
-GDB DEBUG:
-   Break on function calls with objdump (objdump -M intel -d main | grep -B2 "call.*DrawTextPro").
-   When debuging possible stack issues check for alignment with "info registers".
-   The check for alignment
-   Unaligned: rsp = 0x7fffffffd9e8
-   Aligned: rsp = 0x7fffffffd9e0
+   rsp to be 16-byte aligned before usage

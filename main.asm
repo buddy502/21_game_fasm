@@ -64,22 +64,16 @@ _start:
    mov edi, 0xFFD3D3D3
    call ClearBackground
 
-   ; Draw Card
-   ; Card rectangle
    movq xmm0, [card_rectangle]       ; load first 2 floats: x, y
    movq xmm1, [card_rectangle + 8]   ; load next 2 floats: w, h
-   ; Card roundedness
    movss xmm2, [card_roundedness]
-   ; Card segments
    mov edi, 10
-   ; Card color
    mov esi, 0xFF000000
-   ; Call the function
    call DrawRectangleRounded
    ; --------------------------------
 
    call drawNumOnCard
-   call updateGame
+   ;call updateGame
 
    ; Program End Drawing ---------------------------------------------------
    call EndDrawing
@@ -112,5 +106,5 @@ card_num_pos_relative:
    xy: dd 5, 5 ; (x, y)
 
 ; include headers
-include 'events.inc'
+;include 'events.inc'
 include 'create_cards.inc'
