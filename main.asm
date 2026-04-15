@@ -16,6 +16,10 @@ extrn DrawRectangleRounded
 extrn DrawTextPro
 extrn LoadFont
 extrn UnloadFont
+
+extrn LoadImage
+extrn LoadTextureFromImage
+extrn UnloadImage
 ; ------------------------
 
 ; Format printf
@@ -41,16 +45,61 @@ macro printnf str, len {
 
 _start:
    and rsp, -16 
-   ; create window
    mov rdi, 800
    mov rsi, 600
    mov rdx, window_title
    call InitWindow 
 
-   ; Create a valid font struct
+   ; Load font
    lea rdi, [font_data]
    mov rsi, font
    call LoadFont
+
+   ; Load card suit textures -------------
+   lea rdi, [heart_img]    ; heart
+   mov rsi, heart_path
+   call LoadImage
+
+   lea rdi, [heart_tex]
+   lea rsi, [heart_img]
+   call LoadTextureFromImage
+
+   lea rdi, [heart_img]
+   call UnloadImage
+
+   lea rdi, [diamond_img]  ; diamond
+   mov rsi, diamond_path
+   call LoadImage
+
+   lea rdi, [diamond_tex]
+   lea rsi, [diamond_img]
+   call LoadTextureFromImage
+
+   lea rdi, [diamond_img]
+   call UnloadImage
+
+   lea rdi, [club_img]     ; club
+   mov rsi, club_path
+   call LoadImage
+
+   lea rdi, [club_tex]
+   lea rsi, [club_img]
+   call LoadTextureFromImage
+
+   lea rdi, [club_img]
+   call UnloadImage
+
+   lea rdi, [spade_img]    ; spade
+   mov rsi, spade_path
+   call LoadImage
+
+   lea rdi, [spade_tex]
+   lea rsi, [spade_img]
+   call LoadTextureFromImage
+
+   lea rdi, [spade_img]
+   call UnloadImage
+   ; -------------------------------------
 
    ; Program loop
 .program_loop:
