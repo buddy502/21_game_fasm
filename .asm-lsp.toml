@@ -1,6 +1,0 @@
-[[project]]
-assembler = "fasm"
-instruction_set = "x86-64"
-
-[project.opts]
-include_paths = ["."]
