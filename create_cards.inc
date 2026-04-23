@@ -1,6 +1,7 @@
 ; External functions
 
-extrn DrawTextureEx
+;extrn DrawTextureEx
+extrn DrawTextPro
 
 ;----------------
 
@@ -11,16 +12,16 @@ DIAMOND  equ 2
 SPADE    equ 3
 CLUBS    equ 4
 
-heart_tex:     rb 20
+heart_tex:     rb 24
 heart_img:     rb 24
 
-diamond_tex:   rb 20
+diamond_tex:   rb 24
 diamond_img:   rb 24
 
-spade_tex:     rb 20
+spade_tex:     rb 24
 spade_img:     rb 24
 
-club_tex:      rb 20
+club_tex:      rb 24
 club_img:      rb 24
 
 font_data: rb 48
@@ -28,16 +29,16 @@ font_data: rb 48
 ; -------- SECTION -----------
 section '.data' writeable
 
-font: db "cardsrc/Libre_Baskerville/LibreBaskerville-SemiBold.ttf", 0
+font_path: db "cardsrc/Libre_Baskerville/LibreBaskerville-SemiBold.ttf", 0
 text:
    .fontSize: dd 23.0
    .message:  db " 4", 15 dup(0)
    .spacing:  db 0 
 
-heart_path: db "cardsrc/card_images/heart.svg", 0
-diamond_path: db "cardsrc/card_images/diamond.svg", 0
-spade_path: db "cardsrc/card_images/spade.svg", 0
-club_path: db "cardsrc/card_images/club.svg", 0
+heart_path: db "cardsrc/card_images/heart.png", 0
+diamond_path: db "cardsrc/card_images/diamond.png", 0
+spade_path: db "cardsrc/card_images/spade.png", 0
+club_path: db "cardsrc/card_images/club.png", 0
 
 section '.text' executable
 
@@ -49,7 +50,8 @@ drawNumOnCard:
    mov rbp, rsp
    sub rsp, 64
 
-   mov rax, [font_data]
+   mov rax, [font_data] ; use stack for font
+
    mov [rsp], rax
    mov rax, [font_data+8]
    mov [rsp+8], rax

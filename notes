@@ -23,3 +23,28 @@ updateGame:
    
    Every function call in fasm requires 8 bytes so this variadic function needs
    rsp to be 16-byte aligned before usage
+
+Structs:
+   Structs used in assembly are aligned by 8 bytes so in cases of 5 ints(20 bytes), it should be 24 bytes
+
+In cases of function calls with stack:
+   lea rdi, [spade_img]
+   mov rsi, spade_path
+   call LoadImage
+   
+   ; LoadTextureFromImage(Image image) - Image passed by value, returns Texture2D by hidden pointer
+   lea rdi, [spade_tex]          ; hidden return pointer (rdi = where to store Texture2D)
+   
+   sub rsp, 32                   ; make room for Image struct on stack
+   lea rax, [spade_img]          ; use rax as scratch — rdi is already set!
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+   
+   call LoadTextureFromImage
+   add rsp, 32
+
+   Function (LoadTextureFromImage) is being called 8 bytes, 24 bytes for the image, 32 total.

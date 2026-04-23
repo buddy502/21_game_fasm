@@ -13,7 +13,6 @@ extrn BeginDrawing
 extrn EndDrawing
 extrn ClearBackground
 extrn DrawRectangleRounded
-extrn DrawTextPro
 extrn LoadFont
 extrn UnloadFont
 
@@ -52,53 +51,86 @@ _start:
 
    ; Load font
    lea rdi, [font_data]
-   mov rsi, font
+   mov rsi, font_path
    call LoadFont
 
    ; Load card suit textures -------------
-   lea rdi, [heart_img]    ; heart
+
+   ; heart data
+   lea rdi, [heart_img]
    mov rsi, heart_path
    call LoadImage
 
    lea rdi, [heart_tex]
-   lea rsi, [heart_img]
+   ; load img data   
+   sub rsp, 32
+   lea rax, [heart_img]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+
    call LoadTextureFromImage
-
-   lea rdi, [heart_img]
-   call UnloadImage
-
-   lea rdi, [diamond_img]  ; diamond
+   add rsp, 32
+   
+   ; diamond data
+   lea rdi, [diamond_img]
    mov rsi, diamond_path
    call LoadImage
-
+   
    lea rdi, [diamond_tex]
-   lea rsi, [diamond_img]
+   ; load img data   
+   sub rsp, 32
+   lea rax, [diamond_img]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+
    call LoadTextureFromImage
+   add rsp, 32
 
-   lea rdi, [diamond_img]
-   call UnloadImage
-
-   lea rdi, [club_img]     ; club
+   ; club data
+   lea rdi, [club_img]
    mov rsi, club_path
    call LoadImage
-
+   
    lea rdi, [club_tex]
-   lea rsi, [club_img]
+   ; load img data   
+   sub rsp, 32
+   lea rax, [club_img]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+
    call LoadTextureFromImage
+   add rsp, 32
 
-   lea rdi, [club_img]
-   call UnloadImage
-
-   lea rdi, [spade_img]    ; spade
+   ; spade data
+   lea rdi, [spade_img]
    mov rsi, spade_path
    call LoadImage
-
+   
    lea rdi, [spade_tex]
-   lea rsi, [spade_img]
+   ; load img data   
+   sub rsp, 32
+   lea rax, [spade_img]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+   
    call LoadTextureFromImage
-
-   lea rdi, [spade_img]
-   call UnloadImage
+   add rsp, 32
    ; -------------------------------------
 
    ; Program loop
