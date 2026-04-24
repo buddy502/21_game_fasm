@@ -2,6 +2,7 @@
 
 ;extrn DrawTextureEx
 extrn DrawTextPro
+extrn DrawTextureV
 
 ;----------------
 
@@ -66,9 +67,9 @@ drawNumOnCard:
    
    lea rdi, [text.message]
    ; position
-   movups xmm0, [card_rectangle.xy]
+   movups xmm0, [card_rectangle.x]
    ; offset position to fit card
-   movups xmm6, [card_rectangle_offset.num1xy]
+   movups xmm6, [card_rectangle_offset.num1x]
    addps  xmm5, xmm6
    addps xmm0, xmm5
 
@@ -76,8 +77,8 @@ drawNumOnCard:
    pxor xmm2, xmm2
 
    ; font size
-   movss xmm3, [card_rectangle.wh]     ;fontsize
-   addss xmm3, [card_rectangle.wh+4]
+   movss xmm3, [card_rectangle.w]     ;fontsize
+   addss xmm3, [card_rectangle.h]
    movss xmm4, [card_reference_size]
    divss xmm3, xmm4
    movss xmm4, [text.fontSize]
@@ -110,10 +111,10 @@ drawNumOnCard:
    
    lea rdi, [text.message]
    ; position
-   movups xmm0, [card_rectangle.xy]
-   movups xmm5, [card_rectangle.wh]
+   movups xmm0, [card_rectangle.x]
+   movups xmm5, [card_rectangle.w]
    ; offset position to fit card
-   movups xmm6, [card_rectangle_offset.num2xy]
+   movups xmm6, [card_rectangle_offset.num2x]
    subps  xmm5, xmm6
    addps xmm0, xmm5
 
@@ -121,8 +122,8 @@ drawNumOnCard:
    pxor xmm2, xmm2
 
    ; font size
-   movss xmm3, [card_rectangle.wh]     ;fontsize
-   addss xmm3, [card_rectangle.wh+4]
+   movss xmm3, [card_rectangle.w]     ;fontsize
+   addss xmm3, [card_rectangle.h]
    movss xmm4, [card_reference_size]
    divss xmm3, xmm4
    movss xmm4, [text.fontSize]
@@ -139,44 +140,24 @@ drawNumOnCard:
    pop rbp
    ret
 
-;loadCardSuits:
-;.heart:
-;   ; === Draw loop — centered with scale ===
-;   ; posX = (screenW - texW * scale) / 2
-;   ; posY = (screenH - texH * scale) / 2
-;   
-;   movss xmm0, [scale]
-;   cvtsi2ss xmm1, [tex_width]      ; tex width as float
-;   mulss xmm0, xmm1                ; texW * scale
-;   mov eax, 800
-;   cvtsi2ss xmm1, eax              ; screenW as float
-;   subss xmm1, xmm0
-;   movss xmm6, [half]              ; 0.5
-;   mulss xmm1, xmm6                ; /2 -> posX
-;   
-;   ; similar for posY...
-;   
-;   ; DrawTextureEx(tex, position, rotation, scale, tint)
-;   lea rdi, [heart_tex]
-;   movq xmm0, xmm1                 ; Vector2 position {x, y} packed
-;   movss xmm1, [rotation]
-;   movss xmm2, [scale]
-;   mov esi, 0xFFFFFFFF             ; WHITE
-;   call DrawTextureEx 
-;
-;.diamond:
-;.club:
-;.spade:
+drawSuitTexture: 
+   push rbp
+   mov rbp, rsp
+   sub rsp, 40
 
-; Create suit and ranks of card
-; Use bytes to access index easily
-;
-;deck:
-;times 52 db 0
-;
-;deck_rank:
-;db 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
-;
-;suits:
-;db 0, 1, 2, 3
-;
+   mov rax, [rdi]
+   mov [rsp], rax
+   mov rax, [rdi+8]
+   mov [rsp+8], rax
+   mov rax, [rdi+16]
+   mov [rsp+16], rax
+
+   movups xmm0, [card_rectangle.w]
+
+   mov edi, 0xFFFFFFFF
+
+   call DrawTextureV
+
+   mov rsp, rbp
+   pop rbp
+   ret

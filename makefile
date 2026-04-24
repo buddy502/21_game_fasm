@@ -3,7 +3,7 @@ main: main.o
 	-dynamic-linker /usr/lib64/ld-linux-x86-64.so.2 \
 	-lc -g -L./raylib/ -lglfw -lraylib -lm -lX11
 
-main.o: main.asm create_cards.inc events.inc
+main.o: main.asm common_cards.inc events.inc
 	fasm main.asm
 
 test:

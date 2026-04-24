@@ -74,7 +74,7 @@ _start:
 
    call LoadTextureFromImage
    add rsp, 32
-   
+
    ; diamond data
    lea rdi, [diamond_img]
    mov rsi, diamond_path
@@ -153,6 +153,12 @@ _start:
    call DrawRectangleRounded
    ; --------------------------------
 
+   lea rdi, [heart_img] 
+   call updateSuitSize
+
+   lea rdi, [heart_tex]
+   call drawSuitTexture
+
    call drawNumOnCard
    ;call updateGame
 
@@ -171,11 +177,15 @@ Error_call: db "Unexpected Error, segfault", 10, 0
 window_title: db "21 game", 0
 
 card_rectangle:
-   .xy: dd 200.0, 200.0 ; (x, y)
-   .wh: dd 100.0, 150.0 ;  (w, h)
+   .x: dd 200.0
+   .y: dd 200.0
+   .w: dd 100.0
+   .h: dd 150.0
 card_rectangle_offset:
-   .num1xy: dd 6.0, 6.0
-   .num2xy: dd 23.0, 25.0
+   .num1x: dd 6.0
+   .num1y: dd 6.0
+   .num2x: dd 23.0
+   .num2y: dd 25.0
 
 card_reference_size: 
    dd 300.0
@@ -187,5 +197,5 @@ card_num_pos_relative:
    xy: dd 5, 5 ; (x, y)
 
 ; include headers
-;include 'events.inc'
-include 'create_cards.inc'
+include "events.inc"
+include "common_cards.inc"

@@ -1,22 +1,20 @@
 KEY_RIGHT   = 262
 KEY_LEFT    = 263
 
-extrn IsKeyPressed
 extrn atoi
 extrn sprintf
+
+; Raylib external functions
+extrn IsKeyPressed
+extrn ImageResize
 
 section '.data' writeable
 
 card_number: dd 4
 
-fmt_int: db '%d', 0
-fmt_msg: db '%s', 0
-msg db "hello", 10, 0
-
 section '.text' executable
 
 updateGame:
-
 .check_left_key:
     mov edi, KEY_LEFT
     call IsKeyPressed
@@ -56,4 +54,16 @@ updateGame:
     jmp .end_update_game
 
 .end_update_game:
+   ret
+
+; resize the card suit image to always fit the size of the card
+updateSuitSize:
+   sub rsp, 8
+
+   ; rdi is used for Image *image
+   cvtss2si esi, [card_rectangle.x]
+   cvtss2si edx, [card_rectangle.y]
+   call ImageResize 
+
+   add rsp, 8
    ret
