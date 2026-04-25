@@ -153,13 +153,13 @@ _start:
    call DrawRectangleRounded
    ; --------------------------------
 
-   lea rdi, [heart_img] 
-   call updateSuitSize
-
-   lea rdi, [heart_tex]
+   lea rdi, [heart_img]
+   lea rsi, [heart_tex]
    call drawSuitTexture
 
-   call drawNumOnCard
+   ;!Important: fix
+   ;call drawNumOnCard
+
    ;call updateGame
 
    ; Program End Drawing ---------------------------------------------------
@@ -186,6 +186,10 @@ card_rectangle_offset:
    .num1y: dd 6.0
    .num2x: dd 23.0
    .num2y: dd 25.0
+
+card_rectangle_resize:
+   .x: dd 1
+   .y: dd 1
 
 card_reference_size: 
    dd 300.0

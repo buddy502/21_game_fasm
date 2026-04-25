@@ -3,7 +3,8 @@
 ;extrn DrawTextureEx
 extrn DrawTextPro
 extrn DrawTextureV
-
+extrn UpdateTexture
+extrn ImageResize
 ;----------------
 
 section '.bss' writeable
@@ -140,24 +141,65 @@ drawNumOnCard:
    pop rbp
    ret
 
-drawSuitTexture: 
+drawSuitTexture:
    push rbp
    mov rbp, rsp
-   sub rsp, 40
+   sub rsp, 48
+   
+   mov [rbp-8], rdi                ; Image *
+   mov [rbp-16], rsi               ; Texture2D *
+   
+   mov rdi, [rbp-8]
 
-   mov rax, [rdi]
-   mov [rsp], rax
-   mov rax, [rdi+8]
-   mov [rsp+8], rax
-   mov rax, [rdi+16]
-   mov [rsp+16], rax
+   movss xmm0, [card_rectangle_resize.x]
+   cvtss2si esi, xmm0
 
-   movups xmm0, [card_rectangle.w]
+   movss xmm0, [card_rectangle_resize.y]
+   cvtss2si edx, xmm0
 
-   mov edi, 0xFFFFFFFF
+   call ImageResize
+   
+   mov rsi, [rbp-16]
+   
+   sub rsp, 32
+   mov eax, [rsi]
+   mov [rsp], eax
+   mov eax, [rsi+4]
+   mov [rsp+4], eax
+   mov eax, [rsi+8]
+   mov [rsp+8], eax
+   mov eax, [rsi+12]
+   mov [rsp+12], eax
+   mov eax, [rsi+16]
+   mov [rsp+16], eax
+   
+   mov rax, [rbp-8]
+   mov rdi, [rax]
+   
+   call UpdateTexture 
+   add rsp, 32
 
+   mov rdi, [rbp-16]
+
+   sub rsp, 32
+   mov eax, [rdi]
+   mov [rbp-40], eax
+   mov eax, [rdi+4]
+   mov [rbp-36], eax
+   mov eax, [rdi+8]
+   mov [rbp-32], eax
+   mov eax, [rdi+12]
+   mov [rbp-28], eax
+   mov eax, [rdi+16]
+   mov [rbp-24], eax
+
+   movss xmm0, [card_rectangle.x]
+   movss xmm1, [card_rectangle.y]
+   
+   mov esi, 0xFFFFFFFF
+   
    call DrawTextureV
-
-   mov rsp, rbp
-   pop rbp
+   add rsp, 32
+   
+   leave
    ret
