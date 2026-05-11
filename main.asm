@@ -16,6 +16,8 @@ extrn DrawRectangleRounded
 extrn DrawTextPro
 extrn LoadFont
 extrn UnloadFont
+extrn LoadImage
+extrn LoadTextureFromImage
 ; ------------------------
 
 ; Format printf
@@ -51,6 +53,24 @@ _start:
    lea rdi, [font_data]
    mov rsi, font
    call LoadFont
+
+   ; LOAD SUIT TEXTURES
+
+   lea rdi, [spade_tex]
+   ; load spade img data   
+   sub rsp, 32
+   lea rax, [spade_img]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+   
+   call LoadTextureFromImage
+   add rsp, 32
+
+   ; -------------------------------------------------------
 
    ; Program loop
 .program_loop:
@@ -106,5 +126,5 @@ card_num_pos_relative:
    xy: dd 5, 5 ; (x, y)
 
 ; include headers
-include 'events.inc'
-include 'create_cards.inc'
+include "events.inc"
+include "common_cards.inc"

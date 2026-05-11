@@ -1,13 +1,43 @@
+; Cards struct format:
+;typedef struct Card {
+;   int suit;
+;   int value;
+;}
+; Card position is determined by user, like draw or click
+
+section '.bss' writeable
+
+;heart_tex:     rb 24
+;heart_img:     rb 24
+;
+;diamond_tex:   rb 24
+;diamond_img:   rb 24
+;
+;
+;club_tex:      rb 24
+;club_img:      rb 24
+
+spade_tex:     rb 24
+spade_img:     rb 24
+
+font_data: rb 48
+
 ; -------- SECTION -----------
 section '.data' writeable
 
-font_data: rb 48
 font: db "cardsrc/Libre_Baskerville/LibreBaskerville-SemiBold.ttf", 0
 text:
    .fontSize: dd 23.0
    .message:  db " 4", 15 dup(0)
    .spacing:  db 0 
 
+; Breaks: Card update and sprintf
+heart_path: db "cardsrc/card_images/heart.png", 0
+diamond_path: db "cardsrc/card_images/diamond.png", 0
+;spade_path: db "cardsrc/card_images/spade.png", 0
+club_path: db "cardsrc/card_images/club.png", 0
+
+; -------- SECTION -----------
 section '.text' executable
 
 ; draw_num_on_card()
