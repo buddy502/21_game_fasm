@@ -153,8 +153,8 @@ _start:
    call DrawRectangleRounded
    ; --------------------------------
 
-   lea rdi, [heart_img]
-   lea rsi, [heart_tex]
+   lea rdi, [spade_img]
+   lea rsi, [spade_tex]
    call drawSuitTexture
 
    ;!Important: fix

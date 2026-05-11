@@ -1,5 +1,12 @@
 ; External functions
 
+; Cards struct format:
+;typedef struct Card {
+;   int suit;
+;   int value;
+;}
+; Card position is determined by user, like draw or click
+
 ;extrn DrawTextureEx
 extrn DrawTextPro
 extrn DrawTextureV
