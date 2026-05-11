@@ -73,7 +73,7 @@ _start:
    ; --------------------------------
 
    call drawNumOnCard
-   ;call updateGame
+   call updateGame
 
    ; Program End Drawing ---------------------------------------------------
    call EndDrawing
@@ -106,5 +106,5 @@ card_num_pos_relative:
    xy: dd 5, 5 ; (x, y)
 
 ; include headers
-;include 'events.inc'
+include 'events.inc'
 include 'create_cards.inc'
