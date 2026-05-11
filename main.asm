@@ -56,10 +56,72 @@ _start:
 
    ; LOAD SUIT TEXTURES
 
-   lea rdi, [spade_tex]
-   ; load spade img data   
+   ; load heart img
+   lea rdi, [heart_data]
+   mov rsi, heart_path
+   call LoadImage
+
+   lea rdi, [heart_tex]
+   ; load heart data   
    sub rsp, 32
-   lea rax, [spade_img]
+   lea rax, [heart_data]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+
+   call LoadTextureFromImage
+   add rsp, 32
+
+   ; load diamond img
+   lea rdi, [diamond_data]
+   mov rsi, diamond_path
+   call LoadImage
+   
+   lea rdi, [diamond_tex]
+   ; load heart data   
+   sub rsp, 32
+   lea rax, [diamond_data]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+
+   call LoadTextureFromImage
+   add rsp, 32
+
+   ; load club img
+   lea rdi, [club_data]
+   mov rsi, club_path
+   call LoadImage
+   
+   lea rdi, [club_tex]
+   ; load club data   
+   sub rsp, 32
+   lea rax, [club_data]
+   mov rcx, [rax]
+   mov [rsp], rcx
+   mov rcx, [rax+8]
+   mov [rsp+8], rcx
+   mov rcx, [rax+16]
+   mov [rsp+16], rcx
+
+   call LoadTextureFromImage
+   add rsp, 32
+
+   ; load spade img
+   lea rdi, [spade_data]
+   mov rsi, spade_path
+   call LoadImage
+
+   lea rdi, [spade_tex]
+   ; load spade data   
+   sub rsp, 32
+   lea rax, [spade_data]
    mov rcx, [rax]
    mov [rsp], rcx
    mov rcx, [rax+8]
@@ -92,6 +154,10 @@ _start:
    call DrawRectangleRounded
    ; --------------------------------
 
+   lea rdi, [spade_data]
+   lea rsi, [spade_tex]
+   call drawSuitTexture
+
    call drawNumOnCard
    call updateGame
 
@@ -110,11 +176,15 @@ Error_call: db "Unexpected Error, segfault", 10, 0
 window_title: db "21 game", 0
 
 card_rectangle:
-   .xy: dd 200.0, 200.0 ; (x, y)
-   .wh: dd 100.0, 150.0 ;  (w, h)
+   .x: dd 200.0
+   .y: dd 200.0
+   .w: dd 100.0
+   .h: dd 150.0
 card_rectangle_offset:
-   .num1xy: dd 6.0, 6.0
-   .num2xy: dd 23.0, 25.0
+   .num1x: dd 6.0
+   .num1y: dd 6.0
+   .num2x: dd 23.0
+   .num2y: dd 25.0
 
 card_reference_size: 
    dd 300.0
